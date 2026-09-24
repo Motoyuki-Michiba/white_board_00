@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<savedqueries xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <savedquery>
+    <IsCustomizable>1</IsCustomizable>
+    <CanBeDeleted>0</CanBeDeleted>
+    <isquickfindquery>0</isquickfindquery>
+    <isprivate>0</isprivate>
+    <isdefault>1</isdefault>
+    <savedqueryid>{584faa15-eea5-4423-8539-73c81c192997}</savedqueryid>
+    <layoutxml>
+      <grid name="resultset" jump="mtl_title" select="1" icon="1" preview="1">
+        <row name="result" id="mtl_whiteboardpostid">
+          <cell name="mtl_title" width="300" />
+          <cell name="createdon" width="125" />
+        </row>
+      </grid>
+    </layoutxml>
+    <querytype>1</querytype>
+    <fetchxml>
+      <fetch version="1.0" mapping="logical">
+        <entity name="mtl_whiteboardpost">
+          <attribute name="mtl_whiteboardpostid" />
+          <attribute name="mtl_title" />
+          <attribute name="createdon" />
+          <order attribute="mtl_title" descending="false" />
+        </entity>
+      </fetch>
+    </fetchxml>
+    <IntroducedVersion>1.0</IntroducedVersion>
+    <LocalizedNames>
+      <LocalizedName description="White Board Post Advanced Find View" languagecode="1033" />
+    </LocalizedNames>
+  </savedquery>
+</savedqueries>

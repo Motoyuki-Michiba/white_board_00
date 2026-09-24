@@ -11,7 +11,7 @@ The first release will be a solution-aware Canvas App backed by Dataverse. It wi
 | User-facing field | Planned schema name | Purpose |
 | --- | --- | --- |
 | Title | `mtl_title` | Short, required summary of the information. |
-| Message | `mtl_message` | Required rich-text post content. |
+| Message | `mtl_message` | Required multiline post content. |
 | Category | `mtl_category` | `General`, `Tender`, `Project`, `Meeting`, or `Reference`. |
 | Priority | `mtl_priority` | `Normal`, `Important`, or `Urgent`. |
 | Pinned | `mtl_ispinned` | Keeps important posts at the top of the board. |
