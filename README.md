@@ -1,81 +1,44 @@
-# Mail Scheduler
+# White Board 00
 
-Power Platform solution for scheduling email delivery from `michiba.motoyuki@shimz.biz`.
+Power Platform application for sharing timely information within the Estimation team.
 
-## Deployed foundation
+## Current delivery scope
 
-- Environment: **Estimation Dev** (`https://org0e46434e.crm7.dynamics.com/`)
-- Solution: `MailSchedulerSolution`
-- Dataverse table: `mtl_scheduledemail` (Scheduled Email)
-- Single attachment: `mtl_attachment`, maximum 10 MB
+The first release will be a solution-aware Canvas App backed by Dataverse. It will let authorised team members create, find, read, update, and archive internal posts.
 
-| App field | Dataverse column |
-| --- | --- |
-| Email name | `mtl_name` |
-| To | `mtl_torecipients` |
-| CC | `mtl_ccrecipients` |
-| BCC | `mtl_bccrecipients` |
-| Subject | `mtl_subject` |
-| Message body | `mtl_body` |
-| Send at | `mtl_scheduledfor` |
-| Status | `mtl_status` |
-| Attachment | `mtl_attachment` |
-| Error detail | `mtl_errormessage` |
+### Initial post fields
 
-## Canvas App
+| User-facing field | Planned schema name | Purpose |
+| --- | --- | --- |
+| Title | `mtl_title` | Short, required summary of the information. |
+| Message | `mtl_message` | Required rich-text post content. |
+| Category | `mtl_category` | `General`, `Tender`, `Project`, `Meeting`, or `Reference`. |
+| Priority | `mtl_priority` | `Normal`, `Important`, or `Urgent`. |
+| Pinned | `mtl_ispinned` | Keeps important posts at the top of the board. |
+| Publish from | `mtl_publishfrom` | Optional date/time when a post becomes visible. |
+| Expires on | `mtl_expireson` | Optional date/time after which a post is hidden from the default board. |
+| Status | `mtl_status` | `Draft`, `Published`, or `Archived`. |
+| Attachment | `mtl_attachment` | Optional supporting file; file-size limit to be confirmed. |
 
-Create a blank Canvas App called **Mail Scheduler** in `MailSchedulerSolution`, add the `Scheduled Emails` Dataverse table, and create an edit screen containing the first nine fields in the table above. Use `TextInput` controls for recipients, subject, and body; a date picker and time dropdown for `Send at`; and an attachment/file control bound to `mtl_attachment`.
+The Dataverse table will be named `mtl_whiteboardpost` (`White Board Post`) and use user/team ownership. Dataverse-created fields provide the author and audit timestamps.
 
-Save button formula, after binding controls to the form:
+## Canvas app behaviour
 
-```powerfx
-SubmitForm(frmScheduledEmail);
-Notify("Email scheduled.", NotificationType.Success);
-Back()
-```
+- **Board:** Shows published, non-expired posts, ordered by pinned status then newest first. Users can search title/message and filter category and priority.
+- **Post details:** Shows the full message and attachment.
+- **Create/edit:** Authors can save a draft, publish, or archive their own post. Team administrators can moderate all posts once security roles are configured.
+- **Speech-to-text:** Planned as an optional message-entry aid after IT approves Azure AI Speech. Users will review and edit the recognised text before saving.
 
-Set the default value of the Status data card to:
+## Security and operation
 
-```powerfx
-"Scheduled"
-```
+- Access is restricted to authorised Estimation team members using Dataverse privileges; hidden controls alone do not provide security.
+- No external sharing, email sending, or production deployment is in scope for this initial release.
+- The app and table must be built inside `WhiteBoard00Solution` with publisher prefix `mtl`.
 
-The browse gallery should filter out completed mail by default:
+## Acceptance test for the first release
 
-```powerfx
-Filter('Scheduled Emails', mtl_status <> "Sent")
-```
-
-## Cloud flow: Send due scheduled emails
-
-Create an automated cloud flow in the same solution named **Send due scheduled emails**.
-
-1. Trigger: **Recurrence**, every 1 minute, time zone `Singapore Standard Time`.
-2. Dataverse **List rows** from `Scheduled Emails`, with Filter rows:
-
-   ```text
-   mtl_status eq 'Scheduled' and mtl_scheduledfor le @{utcNow()}
-   ```
-
-3. For each result, immediately update Status to `Sending`. This is the send lock and prevents a second recurrence from delivering the same item.
-4. Use **Download a file or an image** for `mtl_attachment` when an attachment exists.
-5. Use **Office 365 Outlook – Send an email (V2)**:
-   - To: `mtl_torecipients`
-   - CC: `mtl_ccrecipients`
-   - BCC: `mtl_bccrecipients`
-   - Subject: `mtl_subject`
-   - Body: `mtl_body`
-   - Is HTML: Yes
-   - Attachment Name: `mtl_attachment_name`
-   - Attachment Content: file content from step 4
-6. On success, update Status to `Sent` and clear Error detail.
-7. Configure a **run-after** branch for failure; update Status to `Failed` and set Error detail to the failed action's message.
-
-Do not add an automatic retry for failed messages until the first production test is complete; a mail provider can accept a message but return an ambiguous failure, which could cause a duplicate email.
-
-## Security and operating guardrails
-
-- The Outlook connection must be owned by Mike's Shimizu Microsoft 365 account.
-- Start with a test recipient and a send time at least five minutes ahead.
-- Restrict table access to the people who are allowed to send mail as this account.
-- The first release supports one attachment per scheduled email. Multiple attachments can be added later with a child `Email Attachment` table.
+1. An authorised user creates a draft with title and message.
+2. The user publishes it and it appears in the default board.
+3. Search and category/priority filters find the post.
+4. A normal user cannot edit another author's post.
+5. Archiving hides a post from the default board without deleting it.
