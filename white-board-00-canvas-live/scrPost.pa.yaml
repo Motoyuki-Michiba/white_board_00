@@ -1,0 +1,487 @@
+Screens:
+    scrPost:
+        Children:
+            - conPostRoot:
+                Control: GroupContainer
+                Variant: AutoLayout
+                Properties:
+                    LayoutDirection: =LayoutDirection.Vertical
+                    LayoutAlignItems: =LayoutAlignItems.Stretch
+                    LayoutGap: =16
+                    LayoutOverflowY: =LayoutOverflow.Scroll
+                    PaddingTop: =If(Parent.Width < 600, 16, 40)
+                    PaddingRight: =If(Parent.Width < 600, 16, 40)
+                    PaddingBottom: =If(Parent.Width < 600, 16, 40)
+                    PaddingLeft: =If(Parent.Width < 600, 16, 40)
+                    Width: =Parent.Width
+                    Height: =Parent.Height
+                    LayoutMinWidth: =0
+                    LayoutMinHeight: =0
+                Children:
+                    - conPostHeader:
+                        Control: GroupContainer
+                        Variant: AutoLayout
+                        Properties:
+                            LayoutDirection: =LayoutDirection.Horizontal
+                            LayoutAlignItems: =LayoutAlignItems.Center
+                            LayoutGap: =16
+                            Width: =Parent.Width
+                            Height: =56
+                            LayoutMinWidth: =0
+                            LayoutMinHeight: =0
+                        Children:
+                            - lblPostHeading:
+                                Control: Label
+                                Properties:
+                                    Text: ="New post"
+                                    Font: =Font.'Open Sans'
+                                    FontWeight: =FontWeight.Bold
+                                    Size: =24
+                                    Color: =RGBA(0, 0, 0, 1)
+                                    Width: =Max(0, Parent.Width - 136)
+                                    Height: =44
+                                    Wrap: =false
+                                    PaddingTop: =0
+                                    PaddingRight: =0
+                                    PaddingBottom: =0
+                                    PaddingLeft: =0
+                            - btnPostCancel:
+                                Control: Classic/Button
+                                Properties:
+                                    Text: ="Cancel"
+                                    OnSelect: =ResetForm(frmPost); Navigate(scrBoard, ScreenTransition.None)
+                                    Font: =Font.'Open Sans'
+                                    FontWeight: =FontWeight.Semibold
+                                    Color: =RGBA(56, 96, 178, 1)
+                                    Fill: =RGBA(255, 255, 255, 1)
+                                    Width: =120
+                                    Height: =44
+                    - frmPost:
+                        Control: Form
+                        Variant: Classic
+                        Layout: Vertical
+                        Properties:
+                            DataSource: ='White Board Posts'
+                            DefaultMode: =FormMode.New
+                            Item: =Defaults('White Board Posts')
+                            OnSuccess: =Set(varPostSaveReceipt, frmPost.LastSubmit); Refresh('White Board Posts'); ResetForm(frmPost); Navigate(scrBoard, ScreenTransition.None)
+                            OnFailure: =Notify(frmPost.Error, NotificationType.Error)
+                            Height: =952
+                            Width: =Parent.Width
+                            NumberOfColumns: =1
+                            SnapToColumns: =false
+                            Fill: =RGBA(255, 255, 255, 1)
+                        Children:
+                            - dcPostTitle:
+                                Control: TypedDataCard
+                                Variant: ClassicTextualEdit
+                                Properties:
+                                    DataField: ="mtl_title"
+                                    Default: =ThisItem.mtl_title
+                                    DisplayMode: =Parent.DisplayMode
+                                    DisplayName: ="Title"
+                                    Height: =96
+                                    Required: =false
+                                    Update: =txtPostTitle.Text
+                                    Width: =Parent.Width
+                                    WidthFit: =false
+                                    X: =0
+                                    Y: =0
+                                Children:
+                                    - lblPostTitle:
+                                        Control: Label
+                                        Properties:
+                                            Text: ="Title"
+                                            Font: =Font.'Open Sans'
+                                            Size: =14
+                                            Color: =RGBA(0, 0, 0, 1)
+                                            Width: =Parent.Width - 24
+                                            Height: =24
+                                            X: =12
+                                            Y: =0
+                                            Wrap: =false
+                                            PaddingTop: =0
+                                            PaddingRight: =0
+                                            PaddingBottom: =0
+                                            PaddingLeft: =0
+                                    - txtPostTitle:
+                                        Control: Classic/TextInput
+                                        Properties:
+                                            AccessibleLabel: ="Title"
+                                            Default: =Parent.Default
+                                            DisplayMode: =Parent.DisplayMode
+                                            Height: =44
+                                            Width: =Parent.Width - 24
+                                            X: =12
+                                            Y: =32
+                            - dcPostMessage:
+                                Control: TypedDataCard
+                                Variant: ClassicTextualMultilineEdit
+                                Properties:
+                                    DataField: ="mtl_message"
+                                    Default: =ThisItem.mtl_message
+                                    DisplayMode: =Parent.DisplayMode
+                                    DisplayName: ="Message"
+                                    Height: =144
+                                    Required: =false
+                                    Update: =txtPostMessage.Text
+                                    Width: =Parent.Width
+                                    WidthFit: =false
+                                    X: =0
+                                    Y: =96
+                                Children:
+                                    - lblPostMessage:
+                                        Control: Label
+                                        Properties:
+                                            Text: ="Message"
+                                            Font: =Font.'Open Sans'
+                                            Size: =14
+                                            Color: =RGBA(0, 0, 0, 1)
+                                            Width: =Parent.Width - 24
+                                            Height: =24
+                                            X: =12
+                                            Y: =0
+                                            Wrap: =false
+                                            PaddingTop: =0
+                                            PaddingRight: =0
+                                            PaddingBottom: =0
+                                            PaddingLeft: =0
+                                    - txtPostMessage:
+                                        Control: Classic/TextInput
+                                        Properties:
+                                            AccessibleLabel: ="Message"
+                                            Default: =Parent.Default
+                                            DisplayMode: =Parent.DisplayMode
+                                            Mode: =TextMode.MultiLine
+                                            Height: =92
+                                            Width: =Parent.Width - 24
+                                            X: =12
+                                            Y: =32
+                            - dcPostCategory:
+                                Control: TypedDataCard
+                                Variant: ClassicComboBoxOptionSetSingleEdit
+                                Properties:
+                                    DataField: ="mtl_category"
+                                    Default: =ThisItem.mtl_category
+                                    DisplayMode: =Parent.DisplayMode
+                                    DisplayName: ="Category"
+                                    Height: =96
+                                    Required: =false
+                                    Update: =cmbPostCategory.Selected.Value
+                                    Width: =Parent.Width
+                                    WidthFit: =false
+                                    X: =0
+                                    Y: =240
+                                Children:
+                                    - lblPostCategory:
+                                        Control: Label
+                                        Properties:
+                                            Text: ="Category"
+                                            Font: =Font.'Open Sans'
+                                            Size: =14
+                                            Color: =RGBA(0, 0, 0, 1)
+                                            Width: =Parent.Width - 24
+                                            Height: =24
+                                            X: =12
+                                            Y: =0
+                                            Wrap: =false
+                                            PaddingTop: =0
+                                            PaddingRight: =0
+                                            PaddingBottom: =0
+                                            PaddingLeft: =0
+                                    - cmbPostCategory:
+                                        Control: Classic/ComboBox
+                                        Properties:
+                                            AccessibleLabel: ="Category"
+                                            DefaultSelectedItems: =[Parent.Default]
+                                            DisplayFields: =["Value"]
+                                            Items: =Choices('White Board Posts'.mtl_category)
+                                            SelectMultiple: =false
+                                            DisplayMode: =Parent.DisplayMode
+                                            Height: =44
+                                            Width: =Parent.Width - 24
+                                            X: =12
+                                            Y: =32
+                            - dcPostPriority:
+                                Control: TypedDataCard
+                                Variant: ClassicComboBoxOptionSetSingleEdit
+                                Properties:
+                                    DataField: ="mtl_priority"
+                                    Default: =ThisItem.mtl_priority
+                                    DisplayMode: =Parent.DisplayMode
+                                    DisplayName: ="Priority"
+                                    Height: =96
+                                    Required: =false
+                                    Update: =cmbPostPriority.Selected.Value
+                                    Width: =Parent.Width
+                                    WidthFit: =false
+                                    X: =0
+                                    Y: =336
+                                Children:
+                                    - lblPostPriority:
+                                        Control: Label
+                                        Properties:
+                                            Text: ="Priority"
+                                            Font: =Font.'Open Sans'
+                                            Size: =14
+                                            Color: =RGBA(0, 0, 0, 1)
+                                            Width: =Parent.Width - 24
+                                            Height: =24
+                                            X: =12
+                                            Y: =0
+                                            Wrap: =false
+                                            PaddingTop: =0
+                                            PaddingRight: =0
+                                            PaddingBottom: =0
+                                            PaddingLeft: =0
+                                    - cmbPostPriority:
+                                        Control: Classic/ComboBox
+                                        Properties:
+                                            AccessibleLabel: ="Priority"
+                                            DefaultSelectedItems: =[Parent.Default]
+                                            DisplayFields: =["Value"]
+                                            Items: =Choices('White Board Posts'.mtl_priority)
+                                            SelectMultiple: =false
+                                            DisplayMode: =Parent.DisplayMode
+                                            Height: =44
+                                            Width: =Parent.Width - 24
+                                            X: =12
+                                            Y: =32
+                            - dcPostPinned:
+                                Control: TypedDataCard
+                                Variant: ClassicYesNoRadioEdit
+                                Properties:
+                                    DataField: ="mtl_ispinned"
+                                    Default: =ThisItem.mtl_ispinned
+                                    DisplayMode: =Parent.DisplayMode
+                                    DisplayName: ="Is Pinned"
+                                    Height: =96
+                                    Required: =false
+                                    Update: =radPostPinned.Selected.Value = "Yes"
+                                    Width: =Parent.Width
+                                    WidthFit: =false
+                                    X: =0
+                                    Y: =432
+                                Children:
+                                    - lblPostPinned:
+                                        Control: Label
+                                        Properties:
+                                            Text: ="Is Pinned"
+                                            Font: =Font.'Open Sans'
+                                            Size: =14
+                                            Color: =RGBA(0, 0, 0, 1)
+                                            Width: =Parent.Width - 24
+                                            Height: =24
+                                            X: =12
+                                            Y: =0
+                                            Wrap: =false
+                                            PaddingTop: =0
+                                            PaddingRight: =0
+                                            PaddingBottom: =0
+                                            PaddingLeft: =0
+                                    - radPostPinned:
+                                        Control: Classic/Radio
+                                        Properties:
+                                            AccessibleLabel: ="Is Pinned"
+                                            Default: =If(Parent.Default, "Yes", "No")
+                                            Items: =["Yes", "No"]
+                                            Layout: =Layout.Horizontal
+                                            DisplayMode: =Parent.DisplayMode
+                                            Height: =44
+                                            Width: =Parent.Width - 24
+                                            X: =12
+                                            Y: =32
+                            - dcPostPublishFrom:
+                                Control: TypedDataCard
+                                Variant: ClassicDateTimeEdit
+                                Properties:
+                                    DataField: ="mtl_publishfrom"
+                                    Default: =ThisItem.mtl_publishfrom
+                                    DisplayMode: =Parent.DisplayMode
+                                    DisplayName: ="Publish From"
+                                    Height: =96
+                                    Required: =false
+                                    Update: =dtePostPublishFrom.SelectedDate
+                                    Width: =Parent.Width
+                                    WidthFit: =false
+                                    X: =0
+                                    Y: =528
+                                Children:
+                                    - lblPostPublishFrom:
+                                        Control: Label
+                                        Properties:
+                                            Text: ="Publish From"
+                                            Font: =Font.'Open Sans'
+                                            Size: =14
+                                            Color: =RGBA(0, 0, 0, 1)
+                                            Width: =Parent.Width - 24
+                                            Height: =24
+                                            X: =12
+                                            Y: =0
+                                            Wrap: =false
+                                            PaddingTop: =0
+                                            PaddingRight: =0
+                                            PaddingBottom: =0
+                                            PaddingLeft: =0
+                                    - dtePostPublishFrom:
+                                        Control: Classic/DatePicker
+                                        Properties:
+                                            AccessibleLabel: ="Publish From"
+                                            DefaultDate: =Parent.Default
+                                            DisplayMode: =Parent.DisplayMode
+                                            Height: =44
+                                            Width: =Parent.Width - 24
+                                            X: =12
+                                            Y: =32
+                            - dcPostExpiresOn:
+                                Control: TypedDataCard
+                                Variant: ClassicDateTimeEdit
+                                Properties:
+                                    DataField: ="mtl_expireson"
+                                    Default: =ThisItem.mtl_expireson
+                                    DisplayMode: =Parent.DisplayMode
+                                    DisplayName: ="Expires On"
+                                    Height: =96
+                                    Required: =false
+                                    Update: =dtePostExpiresOn.SelectedDate
+                                    Width: =Parent.Width
+                                    WidthFit: =false
+                                    X: =0
+                                    Y: =624
+                                Children:
+                                    - lblPostExpiresOn:
+                                        Control: Label
+                                        Properties:
+                                            Text: ="Expires On"
+                                            Font: =Font.'Open Sans'
+                                            Size: =14
+                                            Color: =RGBA(0, 0, 0, 1)
+                                            Width: =Parent.Width - 24
+                                            Height: =24
+                                            X: =12
+                                            Y: =0
+                                            Wrap: =false
+                                            PaddingTop: =0
+                                            PaddingRight: =0
+                                            PaddingBottom: =0
+                                            PaddingLeft: =0
+                                    - dtePostExpiresOn:
+                                        Control: Classic/DatePicker
+                                        Properties:
+                                            AccessibleLabel: ="Expires On"
+                                            DefaultDate: =Parent.Default
+                                            DisplayMode: =Parent.DisplayMode
+                                            Height: =44
+                                            Width: =Parent.Width - 24
+                                            X: =12
+                                            Y: =32
+                            - dcPostStatus:
+                                Control: TypedDataCard
+                                Variant: ClassicComboBoxOptionSetSingleEdit
+                                Properties:
+                                    DataField: ="mtl_status"
+                                    Default: ='Status (White Board Posts)'.Draft
+                                    DisplayMode: =Parent.DisplayMode
+                                    DisplayName: ="Status"
+                                    Height: =96
+                                    Required: =false
+                                    Update: ='Status (White Board Posts)'.Draft
+                                    Width: =Parent.Width
+                                    WidthFit: =false
+                                    X: =0
+                                    Y: =720
+                                Children:
+                                    - lblPostStatus:
+                                        Control: Label
+                                        Properties:
+                                            Text: ="Status"
+                                            Font: =Font.'Open Sans'
+                                            Size: =14
+                                            Color: =RGBA(0, 0, 0, 1)
+                                            Width: =Parent.Width - 24
+                                            Height: =24
+                                            X: =12
+                                            Y: =0
+                                            Wrap: =false
+                                            PaddingTop: =0
+                                            PaddingRight: =0
+                                            PaddingBottom: =0
+                                            PaddingLeft: =0
+                                    - cmbPostStatus:
+                                        Control: Classic/ComboBox
+                                        Properties:
+                                            AccessibleLabel: ="Status"
+                                            DefaultSelectedItems: =[Parent.Default]
+                                            DisplayFields: =["Value"]
+                                            Items: =Choices('White Board Posts'.mtl_status)
+                                            SelectMultiple: =false
+                                            DisplayMode: =DisplayMode.Disabled
+                                            Height: =44
+                                            Width: =Parent.Width - 24
+                                            X: =12
+                                            Y: =32
+                            - dcPostAttachment:
+                                Control: TypedDataCard
+                                Variant: ClassicFileEdit
+                                Properties:
+                                    DataField: ="mtl_attachment"
+                                    Default: =ThisItem.mtl_attachment
+                                    DisplayMode: =Parent.DisplayMode
+                                    DisplayName: ="Attachment"
+                                    Height: =136
+                                    Required: =false
+                                    Update: =attPostAttachment.Attachments
+                                    Width: =Parent.Width
+                                    WidthFit: =false
+                                    X: =0
+                                    Y: =816
+                                Children:
+                                    - lblPostAttachment:
+                                        Control: Label
+                                        Properties:
+                                            Text: ="Attachment"
+                                            Font: =Font.'Open Sans'
+                                            Size: =14
+                                            Color: =RGBA(0, 0, 0, 1)
+                                            Width: =Parent.Width - 24
+                                            Height: =24
+                                            X: =12
+                                            Y: =0
+                                            Wrap: =false
+                                            PaddingTop: =0
+                                            PaddingRight: =0
+                                            PaddingBottom: =0
+                                            PaddingLeft: =0
+                                    - attPostAttachment:
+                                        Control: Attachments
+                                        Properties:
+                                            AccessibleLabel: ="Attachment"
+                                            Items: =Parent.Default
+                                            DisplayMode: =Parent.DisplayMode
+                                            Height: =92
+                                            Width: =Parent.Width - 24
+                                            X: =12
+                                            Y: =32
+                    - conPostActions:
+                        Control: GroupContainer
+                        Variant: AutoLayout
+                        Properties:
+                            LayoutDirection: =LayoutDirection.Vertical
+                            LayoutAlignItems: =LayoutAlignItems.Stretch
+                            Width: =Parent.Width
+                            Height: =44
+                            LayoutMinWidth: =0
+                            LayoutMinHeight: =0
+                        Children:
+                            - btnPostSaveDraft:
+                                Control: Classic/Button
+                                Properties:
+                                    Text: ="Save draft"
+                                    OnSelect: =SubmitForm(frmPost)
+                                    DisplayMode: =If(frmPost.Valid, DisplayMode.Edit, DisplayMode.Disabled)
+                                    Font: =Font.'Open Sans'
+                                    FontWeight: =FontWeight.Semibold
+                                    Color: =RGBA(255, 255, 255, 1)
+                                    Fill: =RGBA(56, 96, 178, 1)
+                                    Width: =Parent.Width
+                                    Height: =44
