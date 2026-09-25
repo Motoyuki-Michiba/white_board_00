@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<EntityRelationships xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <EntityRelationship Name="business_unit_mtl_whiteboardpost" />
+  <EntityRelationship Name="FileAttachment_mtl_WhiteBoardPost_mtl_Attachment" />
+  <EntityRelationship Name="lk_mtl_whiteboardpost_createdby" />
+  <EntityRelationship Name="lk_mtl_whiteboardpost_modifiedby" />
+  <EntityRelationship Name="owner_mtl_whiteboardpost" />
+  <EntityRelationship Name="team_mtl_whiteboardpost" />
+  <EntityRelationship Name="user_mtl_whiteboardpost" />
+</EntityRelationships>
